@@ -600,47 +600,40 @@ def newwaycon(dataname):
     sess = tf.compat.v1.Session(config=config)
 
     if dataname == '7317' or dataname == 'ran7317':
-        lnc = './Datasets/Train_dataset/NPinter_human/RNA_human_fasta.fasta'
-        pro = './Datasets/Train_dataset/NPinter_human/protein_human_fasta.fasta'
-        lncFe = open('Datasets/Train_dataset/NPinter_human/lncRED.fasta', 'r').readlines()
-        lncFe4 = open('./Datasets/Train_dataset/NPinter_human/lncDNC.fasta', 'r').readlines()
-        lncFe5 = open('Datasets/Train_dataset/NPinter_human/lnc3mer.fasta', 'r').readlines()
-        proFe = open('Datasets/Train_dataset/NPinter_human/proAAC.fasta', 'r').readlines()
-        proFe9 = open('Datasets/Train_dataset/NPinter_human/pro3mer.fasta', 'r').readlines()
-        proFe10 = open('Datasets/Train_dataset/NPinter_human/pro4mer.fasta', 'r').readlines()
+        lnc = './Datasets/RPI7317/RNA_human_fasta.fasta'
+        pro = './Datasets/RPI7317/protein_human_fasta.fasta'
+        lncFe = open('Datasets/RPI7317/lncRED.fasta', 'r').readlines()
+        lncFe4 = open('./Datasets/RPI7317/lncDNC.fasta', 'r').readlines()
+        lncFe5 = open('Datasets/RPI7317n/lnc3mer.fasta', 'r').readlines()
+        proFe = open('Datasets/RPI7317/proAAC.fasta', 'r').readlines()
+        proFe9 = open('Datasets/RPI7317n/pro3mer.fasta', 'r').readlines()
+        proFe10 = open('Datasets/RPI7317/pro4mer.fasta', 'r').readlines()
     elif dataname == '1847' or dataname == 'ran1847':
-        lnc = './Datasets/Train_dataset/NPinter_mouse/RNA_mouse_fasta.fasta'
-        pro = './Datasets/Train_dataset/NPinter_mouse/protein_mouse_fasta.fasta'
-        lncFe = open('Datasets/Train_dataset/NPinter_mouse/lncRED.fasta', 'r').readlines()
-        lncFe4 = open('./Datasets/Train_dataset/NPinter_mouse/lncDNC.fasta', 'r').readlines()
-        lncFe5 = open('Datasets/Train_dataset/NPinter_mouse/lnc3mer.fasta', 'r').readlines()
-        proFe = open('Datasets/Train_dataset/NPinter_mouse/proAAC.fasta', 'r').readlines()
-        proFe9 = open('Datasets/Train_dataset/NPinter_mouse/pro3mer.fasta', 'r').readlines()
-        proFe10 = open('Datasets/Train_dataset/NPinter_mouse/pro4mer.fasta', 'r').readlines()
+        lnc = './Datasets/RPI1847/RNA_mouse_fasta.fasta'
+        pro = './Datasets/RPI1847/protein_mouse_fasta.fasta'
+        lncFe = open('Datasets/RPI1847/lncRED.fasta', 'r').readlines()
+        lncFe4 = open('./Datasets/RPI1847/lncDNC.fasta', 'r').readlines()
+        lncFe5 = open('Datasets/RPI1847/lnc3mer.fasta', 'r').readlines()
+        proFe = open('Datasets/RPI1847/proAAC.fasta', 'r').readlines()
+        proFe9 = open('Datasets/RPI1847/pro3mer.fasta', 'r').readlines()
+        proFe10 = open('Datasets/RPI1847/pro4mer.fasta', 'r').readlines()
     elif dataname == '21850' or dataname == 'ran21850':
-        lnc = './Datasets/Train_dataset/lncseq.fasta'
-        pro = './Datasets/Train_dataset/proseq.fasta'
-        lncFe = open('Datasets/machineFea/lncRED.fasta', 'r').readlines()
-        lncFe4 = open('Datasets/machineFea/lncDNC.fasta', 'r').readlines()
-        lncFe5 = open('./Datasets/machineFea/lnckmer3.fasta', 'r').readlines()
-        proFe = open('Datasets/machineFea/proAAC.fasta', 'r').readlines()
-        proFe9 = open('Datasets/machineFea/pro3mer.fasta', 'r').readlines()
-        proFe10 = open('Datasets/machineFea/pro4mer.fasta', 'r').readlines()
+        lnc = './Datasets/RPI21850/lncseq.fasta'
+        pro = './Datasets/RPI21850/proseq.fasta'
+        lncFe = open('Datasets/RPI21850/lncRED.fasta', 'r').readlines()
+        lncFe4 = open('Datasets/RPI21850/lncDNC.fasta', 'r').readlines()
+        lncFe5 = open('./Datasets/RPI21850/lnckmer3.fasta', 'r').readlines()
+        proFe = open('Datasets/RPI21850/proAAC.fasta', 'r').readlines()
+        proFe9 = open('Datasets/RPI21850/pro3mer.fasta', 'r').readlines()
+        proFe10 = open('Datasets/RPI21850/pro4mer.fasta', 'r').readlines()
     elif dataname == 'ATH948':
-        lnc = './Datasets/lncRNA-protein/Arabidopsis_rna.fasta'
-        pro = './Datasets/lncRNA-protein/Arabidopsis_protein.fasta'
+        lnc = './Datasets/ATH948/Arabidopsis_rna.fasta'
+        pro = './Datasets/ATH948/Arabidopsis_protein.fasta'
+        strc = './Datasets/ATH948/ATH_data.npy'
     elif dataname == 'ZEA22133':
-        lnc = './Datasets/lncRNA-protein/Zea_mays_rna.fasta'
-        pro = './Datasets/lncRNA-protein/Zea_mays_protein.fasta'
-    elif dataname == 'RPI369':
-        lnc = './Datasets/lncRNA-protein/RPI369_rna.fasta'
-        pro = './Datasets/lncRNA-protein/RPI369_protein.fasta'
-    elif dataname == 'RPI2241':
-        lnc = './Datasets/lncRNA-protein/RPI2241_rna.fasta'
-        pro = './Datasets/lncRNA-protein/RPI2241_protein.fasta'
-    elif dataname == 'RPI1807':
-        lnc = './Datasets/lncRNA-protein/RPI1807_RNA_seq.fasta'
-        pro = './Datasets/lncRNA-protein/RPI1807_protein_seq.fasta'
+        lnc = './Datasets/ZEA22133/Zea_mays_rna.fasta'
+        pro = './Datasets/ZEA22133/Zea_mays_protein.fasta'
+        strc = './Datasets/ZEA22133/ZEA_data.npy'
 
     findlnclen = open(lnc, 'r').readlines()
     findprolen = open(pro, 'r').readlines()
