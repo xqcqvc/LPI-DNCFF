@@ -36,7 +36,7 @@ def preprocess_data(X, scaler=None, stand=True):
 
 
 # 评价指标
-def calculate_performace(pred_res, pred_label, test_label):
+def calculate_performance(pred_res, pred_label, test_label):
     tn, fp, fn, tp = metrics.confusion_matrix(test_label, pred_label).ravel()
     auc = metrics.roc_auc_score(y_score=pred_res, y_true=test_label)
     ap = metrics.average_precision_score(y_score=pred_res, y_true=test_label)
@@ -359,7 +359,7 @@ def get_bag_prodata_1_channel(data, max_len=501):
     return bags
 
 
-def get_maclncdata(lncfea, dataset):
+def get_strclncdata(lncfea, dataset):
     lncDic = {}
     for index, i in enumerate(lncfea):
         if i.startswith('\n'):
@@ -369,7 +369,7 @@ def get_maclncdata(lncfea, dataset):
     return lncDic
 
 
-def get_macprodata(profea, dataset):
+def get_strcprodata(profea, dataset):
     proDic = {}
     for index, i in enumerate(profea):
         L = i[:-1].split('\t')
@@ -400,11 +400,11 @@ class AttentionLayer(Layer):
 
 
 def LPIDNCFF(lnc_window_size, pro_window_size, lnc_glowindow, pro_glowindow,
-             train_lnc_data, train_pro_data, train_glolnc_data, train_glopro_data, train_mac1_data, train_mac2_data,
+             train_lnc_data, train_pro_data, train_glolnc_data, train_glopro_data, train_strc1_data, train_strc2_data,
              Y_train,
-             val_lnc_data, val_pro_data, val_glolnc_data, val_glopro_data, val_mac1_data, val_mac2_data,
+             val_lnc_data, val_pro_data, val_glolnc_data, val_glopro_data, val_strc1_data, val_strc2_data,
              Y_val,
-             test_lnc_data, test_pro_data, test_glolnc_data, test_glopro_data, test_mac1_data, test_mac2_data, 
+             test_lnc_data, test_pro_data, test_glolnc_data, test_glopro_data, test_strc1_data, test_strc2_data,
              Y_test,
              real_labels):
     # locCNN,局部特征提取部分的输入，分别对应着lncRNA和protein的局部特征
@@ -486,16 +486,16 @@ def LPIDNCFF(lnc_window_size, pro_window_size, lnc_glowindow, pro_glowindow,
     xglobal = Dense(dense3)(xglobal)
 
     #FC
-    xmac1 = Dense(64, activation='relu')(inx5)
-    xmac1 = Dense(32, activation='relu')(xmac1)
-    xmac2 = Dense(512, activation='relu')(inx6)
-    xmac2 = Dense(128, activation='relu')(xmac2)
-    xmac = Concatenate()([xmac1, xmac2])
-    xmac = Dense(32)(xmac)
+    xstrc1 = Dense(64, activation='relu')(inx5)
+    xstrc1 = Dense(32, activation='relu')(xstrc1)
+    xstrc2 = Dense(512, activation='relu')(inx6)
+    xstrc2 = Dense(128, activation='relu')(xstrc2)
+    xstrc = Concatenate()([xstrc1, xstrc2])
+    xstrc = Dense(32)(xstrc)
 
-    x = Concatenate()([xlocal, xglobal, xmac])
+    x = Concatenate()([xlocal, xglobal, xstrc])
     #x = Concatenate()([xlocal, xglobal])
-    #x = xmac
+    #x = xstrc
 
     x_reshaped = Reshape((1, -1))(x)
 
@@ -540,34 +540,34 @@ def LPIDNCFF(lnc_window_size, pro_window_size, lnc_glowindow, pro_glowindow,
     print('Training --------------')
 
     model.fit(
-        x=[train_lnc_data, train_pro_data, train_glolnc_data, train_glopro_data, train_mac1_data, train_mac2_data],
+        x=[train_lnc_data, train_pro_data, train_glolnc_data, train_glopro_data, train_strc1_data, train_strc2_data],
         y=Y_train, validation_data=(
-        [val_lnc_data, val_pro_data, val_glolnc_data, val_glopro_data,val_mac1_data, val_mac2_data], Y_val),
+        [val_lnc_data, val_pro_data, val_glolnc_data, val_glopro_data,val_strc1_data, val_strc2_data], Y_val),
         batch_size=256, epochs=100, shuffle=True, verbose=1, callbacks=[early_stopping])
     
     # test
     print('\nTesting---------------')
 
     loss, accuracy = model.evaluate(
-        [test_lnc_data, test_pro_data, test_glolnc_data, test_glopro_data, test_mac1_data, test_mac2_data], Y_test,
+        [test_lnc_data, test_pro_data, test_glolnc_data, test_glopro_data, test_strc1_data, test_strc2_data], Y_test,
         verbose=1)
     print(loss, accuracy)
 
     # get the confidence probability
     testres = model.predict(
-        [test_lnc_data, test_pro_data, test_glolnc_data, test_glopro_data, test_mac1_data, test_mac2_data], verbose=1)
+        [test_lnc_data, test_pro_data, test_glolnc_data, test_glopro_data, test_strc1_data, test_strc2_data], verbose=1)
     pred_res = testres[:, 1]
 
     proba_res = transfer_label_from_prob(pred_res)
     test_label = [int(x) for x in real_labels]
 
-    calculate_performace(pred_res, proba_res, test_label)
+    calculate_performance(pred_res, proba_res, test_label)
     
     feature_extractor = Model(inputs=model.input, outputs=flattened_output)
     train_features = feature_extractor.predict(
-        [train_lnc_data, train_pro_data, train_glolnc_data, train_glopro_data, train_mac1_data, train_mac2_data], verbose=1)
+        [train_lnc_data, train_pro_data, train_glolnc_data, train_glopro_data, train_strc1_data, train_strc2_data], verbose=1)
     test_features = feature_extractor.predict(
-        [test_lnc_data, test_pro_data, test_glolnc_data, test_glopro_data, test_mac1_data, test_mac2_data], verbose=1)
+        [test_lnc_data, test_pro_data, test_glolnc_data, test_glopro_data, test_strc1_data, test_strc2_data], verbose=1)
 
     # PCA和t-SNE可视化
     tsne = TSNE(n_components=2, random_state=42)
@@ -590,11 +590,11 @@ def LPIDNCFF(lnc_window_size, pro_window_size, lnc_glowindow, pro_glowindow,
     #plt.title('Test Features PCA')
     
     #plt.savefig('7317_Bilstm_PCA.png')
-    
+
     return accuracy, model
 
 
-def newwaycon(dataname):
+def main(dataname):
     config = tf.compat.v1.ConfigProto()
     config.gpu_options.per_process_gpu_memory_fraction = 0.3
     sess = tf.compat.v1.Session(config=config)
@@ -602,30 +602,30 @@ def newwaycon(dataname):
     if dataname == '7317' or dataname == 'ran7317':
         lnc = './Datasets/RPI7317/RNA_human_fasta.fasta'
         pro = './Datasets/RPI7317/protein_human_fasta.fasta'
-        lncFe = open('Datasets/RPI7317/lncRED.fasta', 'r').readlines()
-        lncFe4 = open('./Datasets/RPI7317/lncDNC.fasta', 'r').readlines()
-        lncFe5 = open('Datasets/RPI7317n/lnc3mer.fasta', 'r').readlines()
-        proFe = open('Datasets/RPI7317/proAAC.fasta', 'r').readlines()
-        proFe9 = open('Datasets/RPI7317n/pro3mer.fasta', 'r').readlines()
-        proFe10 = open('Datasets/RPI7317/pro4mer.fasta', 'r').readlines()
+        lncstrc = open('Datasets/RPI7317/lncRED.fasta', 'r').readlines()
+        lncstrc4 = open('./Datasets/RPI7317/lncDNC.fasta', 'r').readlines()
+        lncstrc5 = open('Datasets/RPI7317n/lnc3mer.fasta', 'r').readlines()
+        prostrc = open('Datasets/RPI7317/proAAC.fasta', 'r').readlines()
+        prostrc9 = open('Datasets/RPI7317n/pro3mer.fasta', 'r').readlines()
+        prostrc10 = open('Datasets/RPI7317/pro4mer.fasta', 'r').readlines()
     elif dataname == '1847' or dataname == 'ran1847':
         lnc = './Datasets/RPI1847/RNA_mouse_fasta.fasta'
         pro = './Datasets/RPI1847/protein_mouse_fasta.fasta'
-        lncFe = open('Datasets/RPI1847/lncRED.fasta', 'r').readlines()
-        lncFe4 = open('./Datasets/RPI1847/lncDNC.fasta', 'r').readlines()
-        lncFe5 = open('Datasets/RPI1847/lnc3mer.fasta', 'r').readlines()
-        proFe = open('Datasets/RPI1847/proAAC.fasta', 'r').readlines()
-        proFe9 = open('Datasets/RPI1847/pro3mer.fasta', 'r').readlines()
-        proFe10 = open('Datasets/RPI1847/pro4mer.fasta', 'r').readlines()
+        lncstrc = open('Datasets/RPI1847/lncRED.fasta', 'r').readlines()
+        lncstrc4 = open('./Datasets/RPI1847/lncDNC.fasta', 'r').readlines()
+        lncstrc5 = open('Datasets/RPI1847/lnc3mer.fasta', 'r').readlines()
+        prostrc = open('Datasets/RPI1847/proAAC.fasta', 'r').readlines()
+        prostrc9 = open('Datasets/RPI1847/pro3mer.fasta', 'r').readlines()
+        prostrc10 = open('Datasets/RPI1847/pro4mer.fasta', 'r').readlines()
     elif dataname == '21850' or dataname == 'ran21850':
         lnc = './Datasets/RPI21850/lncseq.fasta'
         pro = './Datasets/RPI21850/proseq.fasta'
-        lncFe = open('Datasets/RPI21850/lncRED.fasta', 'r').readlines()
-        lncFe4 = open('Datasets/RPI21850/lncDNC.fasta', 'r').readlines()
-        lncFe5 = open('./Datasets/RPI21850/lnckmer3.fasta', 'r').readlines()
-        proFe = open('Datasets/RPI21850/proAAC.fasta', 'r').readlines()
-        proFe9 = open('Datasets/RPI21850/pro3mer.fasta', 'r').readlines()
-        proFe10 = open('Datasets/RPI21850/pro4mer.fasta', 'r').readlines()
+        lncstrc = open('Datasets/RPI21850/lncRED.fasta', 'r').readlines()
+        lncstrc4 = open('Datasets/RPI21850/lncDNC.fasta', 'r').readlines()
+        lncstrc5 = open('./Datasets/RPI21850/lnckmer3.fasta', 'r').readlines()
+        prostrc = open('Datasets/RPI21850/proAAC.fasta', 'r').readlines()
+        prostrc9 = open('Datasets/RPI21850/pro3mer.fasta', 'r').readlines()
+        prostrc10 = open('Datasets/RPI21850/pro4mer.fasta', 'r').readlines()
     elif dataname == 'ATH948':
         lnc = './Datasets/ATH948/Arabidopsis_rna.fasta'
         pro = './Datasets/ATH948/Arabidopsis_protein.fasta'
@@ -731,21 +731,21 @@ def newwaycon(dataname):
 
     print('train number is {}\ntest number is {}\n val number is {}\n'.format(len(X_train), len(X_test), len(X_val)))
 
-    dataall1 = get_maclncdata(lncFe, dataset)
-    dataall2 = get_maclncdata(lncFe4, dataset)
-    dataall3 = get_maclncdata(lncFe5, dataset)
-    dataall4 = get_macprodata(proFe10, dataset)
-    dataall5 = get_macprodata(proFe, dataset)
-    dataall6 = get_macprodata(proFe9, dataset)
+    dataall1 = get_strclncdata(lncstrc, dataset)
+    dataall2 = get_strclncdata(lncstrc4, dataset)
+    dataall3 = get_strclncdata(lncstrc5, dataset)
+    dataall4 = get_strcprodata(prostrc10, dataset)
+    dataall5 = get_strcprodata(prostrc, dataset)
+    dataall6 = get_strcprodata(prostrc9, dataset)
 
     datalncall = [dataall1[i[0]] + dataall2[i[0]] + dataall3[i[0]] for i in dataset]
     datalncall = preprocess_data(datalncall)
-    maclncdata = np.array(datalncall)
+    strclncdata = np.array(datalncall)
     dataproall = [dataall4[i[1]] + dataall5[i[1]] + dataall6[i[1]] for i in dataset]
     dataproall = preprocess_data(dataproall)
-    macprodata = np.array(dataproall)
+    strcprodata = np.array(dataproall)
 
-    X_train1, X_test_a, Y_train, Y_test_a = train_test_split(maclncdata, y, test_size=0.3, stratify=y,
+    X_train1, X_test_a, Y_train, Y_test_a = train_test_split(strclncdata, y, test_size=0.3, stratify=y,
                                                              random_state=seed)
     X_test1, X_val1, Y_test, Y_val = train_test_split(X_test_a, Y_test_a, test_size=0.5, stratify=Y_test_a,
                                                       random_state=seed)
@@ -753,7 +753,7 @@ def newwaycon(dataname):
     gc.collect()
     print('train number is {}\ntest number is {}\n val number is {}\n'.format(len(X_train1), len(X_test1), len(X_val1)))
 
-    X_train2, X_test_a, Y_train, Y_test_a = train_test_split(macprodata, y, test_size=0.3, stratify=y,
+    X_train2, X_test_a, Y_train, Y_test_a = train_test_split(strcprodata, y, test_size=0.3, stratify=y,
                                                              random_state=seed)
     X_test2, X_val2, Y_test, Y_val = train_test_split(X_test_a, Y_test_a, test_size=0.5, stratify=Y_test_a,
                                                       random_state=seed)
@@ -775,12 +775,12 @@ def newwaycon(dataname):
     test_glolnc_data = np.array([glolncDic[i[0]] for i in X_test if i[0] in glolncDic])
     test_glopro_data = np.array([gloproDic[i[1]] for i in X_test if i[1] in gloproDic])
 
-    train_mac1_data = X_train1
-    val_mac1_data = X_val1
-    test_mac1_data = X_test1
-    train_mac2_data = X_train2
-    val_mac2_data = X_val2
-    test_mac2_data = X_test2
+    train_strc1_data = X_train1
+    val_strc1_data = X_val1
+    test_strc1_data = X_test1
+    train_strc2_data = X_train2
+    val_strc2_data = X_val2
+    test_strc2_data = X_test2
 
     real_labels = []
     for val in Y_test:
@@ -805,11 +805,11 @@ def newwaycon(dataname):
 
     accuracy1, model1 = LPIDNCFF(lnc_window_size, pro_window_size, lnc_glowindow, pro_glowindow,
                                  train_lnc_data, train_pro_data, train_glolnc_data, train_glopro_data,
-                                 train_mac1_data, train_mac2_data, Y_train,
+                                 train_strc1_data, train_strc2_data, Y_train,
                                  val_lnc_data, val_pro_data, val_glolnc_data, val_glopro_data,
-                                 val_mac1_data, val_mac2_data,Y_val,
+                                 val_strc1_data, val_strc2_data,Y_val,
                                  test_lnc_data, test_pro_data, test_glolnc_data, test_glopro_data,
-                                 test_mac1_data, test_mac2_data,Y_test, real_labels)
+                                 test_strc1_data, test_strc2_data,Y_test, real_labels)
 
     model1.save("./Models/" + dataname + ".h5")
 
@@ -820,4 +820,4 @@ parser = argparse.ArgumentParser(
 parser.add_argument('-dataset', type=str, help='RPI21850, RPI7317, RPI1847, ATH948, ZEA22133, ran1847, ran7317 or ran21850')
 args = parser.parse_args()
 datname = args.dataset
-newwaycon(datname)
+main(datname)
