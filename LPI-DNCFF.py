@@ -600,40 +600,40 @@ def main(dataname):
     sess = tf.compat.v1.Session(config=config)
 
     if dataname == '7317' or dataname == 'ran7317':
-        lnc = './Datasets/RPI7317/RNA_human_fasta.fasta'
-        pro = './Datasets/RPI7317/protein_human_fasta.fasta'
-        lncstrc = open('Datasets/RPI7317/lncRED.fasta', 'r').readlines()
-        lncstrc4 = open('./Datasets/RPI7317/lncDNC.fasta', 'r').readlines()
-        lncstrc5 = open('Datasets/RPI7317n/lnc3mer.fasta', 'r').readlines()
-        prostrc = open('Datasets/RPI7317/proAAC.fasta', 'r').readlines()
-        prostrc9 = open('Datasets/RPI7317n/pro3mer.fasta', 'r').readlines()
-        prostrc10 = open('Datasets/RPI7317/pro4mer.fasta', 'r').readlines()
+        lnc = 'Datasets/RPI7317/RNA_human_fasta.fasta'
+        pro = 'Datasets/RPI7317/protein_human_fasta.fasta'
+        lncstrc1 = open('Datasets/RPI7317/lncStrc1.fasta', 'r').readlines()
+        lncstrc2 = open('Datasets/RPI7317/lncStrc2.fasta', 'r').readlines()
+        lncstrc3 = open('Datasets/RPI7317/lncStrc3.fasta', 'r').readlines()
+        prostrc1 = open('Datasets/RPI7317/proStrc1.fasta', 'r').readlines()
+        prostrc2 = open('Datasets/RPI7317/proStrc2.fasta', 'r').readlines()
+        prostrc3 = open('Datasets/RPI7317/proStrc3.fasta', 'r').readlines()
     elif dataname == '1847' or dataname == 'ran1847':
-        lnc = './Datasets/RPI1847/RNA_mouse_fasta.fasta'
-        pro = './Datasets/RPI1847/protein_mouse_fasta.fasta'
-        lncstrc = open('Datasets/RPI1847/lncRED.fasta', 'r').readlines()
-        lncstrc4 = open('./Datasets/RPI1847/lncDNC.fasta', 'r').readlines()
-        lncstrc5 = open('Datasets/RPI1847/lnc3mer.fasta', 'r').readlines()
-        prostrc = open('Datasets/RPI1847/proAAC.fasta', 'r').readlines()
-        prostrc9 = open('Datasets/RPI1847/pro3mer.fasta', 'r').readlines()
-        prostrc10 = open('Datasets/RPI1847/pro4mer.fasta', 'r').readlines()
+        lnc = 'Datasets/RPI1847/RNA_mouse_fasta.fasta'
+        pro = 'Datasets/RPI1847/protein_mouse_fasta.fasta'
+        lncstrc1 = open('Datasets/RPI1847/lncStrc1.fasta', 'r').readlines()
+        lncstrc2 = open('Datasets/RPI1847/lncStrc2.fasta', 'r').readlines()
+        lncstrc3 = open('Datasets/RPI1847/lncStrc3.fasta', 'r').readlines()
+        prostrc1 = open('Datasets/RPI1847/proStrc1.fasta', 'r').readlines()
+        prostrc2 = open('Datasets/RPI1847/proStrc2.fasta', 'r').readlines()
+        prostrc3 = open('Datasets/RPI1847/proStrc3.fasta', 'r').readlines()
     elif dataname == '21850' or dataname == 'ran21850':
-        lnc = './Datasets/RPI21850/lncseq.fasta'
-        pro = './Datasets/RPI21850/proseq.fasta'
-        lncstrc = open('Datasets/RPI21850/lncRED.fasta', 'r').readlines()
-        lncstrc4 = open('Datasets/RPI21850/lncDNC.fasta', 'r').readlines()
-        lncstrc5 = open('./Datasets/RPI21850/lnckmer3.fasta', 'r').readlines()
-        prostrc = open('Datasets/RPI21850/proAAC.fasta', 'r').readlines()
-        prostrc9 = open('Datasets/RPI21850/pro3mer.fasta', 'r').readlines()
-        prostrc10 = open('Datasets/RPI21850/pro4mer.fasta', 'r').readlines()
+        lnc = 'Datasets/RPI21850/lncseq.fasta'
+        pro = 'Datasets/RPI21850/proseq.fasta'
+        lncstrc1 = open('Datasets/RPI21850/lncStrc1.fasta', 'r').readlines()
+        lncstrc2 = open('Datasets/RPI21850/lncStrc2.fasta', 'r').readlines()
+        lncstrc3 = open('Datasets/RPI21850/lncStrc3.fasta', 'r').readlines()
+        prostrc1 = open('Datasets/RPI21850/proStrc1.fasta', 'r').readlines()
+        prostrc2 = open('Datasets/RPI21850/proStrc2.fasta', 'r').readlines()
+        prostrc3 = open('Datasets/RPI21850/proStrc2.fasta', 'r').readlines()
     elif dataname == 'ATH948':
-        lnc = './Datasets/ATH948/Arabidopsis_rna.fasta'
-        pro = './Datasets/ATH948/Arabidopsis_protein.fasta'
-        strc = './Datasets/ATH948/ATH_data.npy'
+        lnc = 'Datasets/ATH948/Arabidopsis_rna.fasta'
+        pro = 'Datasets/ATH948/Arabidopsis_protein.fasta'
+        strc = 'Datasets/ATH948/ATH_data.npy'
     elif dataname == 'ZEA22133':
-        lnc = './Datasets/ZEA22133/Zea_mays_rna.fasta'
-        pro = './Datasets/ZEA22133/Zea_mays_protein.fasta'
-        strc = './Datasets/ZEA22133/ZEA_data.npy'
+        lnc = 'Datasets/ZEA22133/Zea_mays_rna.fasta'
+        pro = 'Datasets/ZEA22133/Zea_mays_protein.fasta'
+        strc = 'Datasets/ZEA22133/ZEA_data.npy'
 
     findlnclen = open(lnc, 'r').readlines()
     findprolen = open(pro, 'r').readlines()
@@ -680,40 +680,22 @@ def main(dataname):
 
     if dataname == '21850':
         data = open('Datasets/Train_dataset/RPI21850.txt', 'r').readlines()
-        seed = 29
     elif dataname == 'ran21850':
         data = open('Datasets/Train_dataset/ran21850.txt', 'r').readlines()
-        seed = 29
     elif dataname == '7317':
         data = open('Datasets/Train_dataset/NPinter_human/RPI7317.txt', 'r').readlines()
-        seed = 13
     elif dataname == 'ran7317':
         data = open('Datasets/Train_dataset/NPinter_human/ran7317.txt', 'r').readlines()
-        seed = 13
     elif dataname == '1847':
         data = open('Datasets/Train_dataset/NPinter_mouse/RPI1847.txt', 'r').readlines()
-        seed = 13
     elif dataname == 'ran1847':
         data = open('Datasets/Train_dataset/NPinter_mouse/ran1847.txt', 'r').readlines()
-        seed = 13
     elif dataname == 'ran1847':
         data = open('Datasets/Train_dataset/NPinter_mouse/ran1847.txt', 'r').readlines()
-        seed = 13
     elif dataname == 'ATH948':
         data = open('Datasets/lncRNA-protein/Arabidopsis_all1.txt', 'r').readlines()
-        seed = 29
     elif dataname == 'ZEA22133':
         data = open('Datasets/lncRNA-protein/Zea_mays_all.txt', 'r').readlines()
-        seed = 29
-    elif dataname == 'RPI369':
-        data = open('Datasets/lncRNA-protein/RPI369_all1.txt', 'r').readlines()
-        seed = 29
-    elif dataname == 'RPI2241':
-        data = open('Datasets/lncRNA-protein/RPI2241_all1.txt', 'r').readlines()
-        seed = 29
-    elif dataname == 'RPI1807':
-        data = open('Datasets/lncRNA-protein/RPI1807_all1.txt', 'r').readlines()
-        seed = 13
 
     data_Lst = np.array([i.split() for i in data])
     dataset = data_Lst[:, 0:2]
@@ -731,12 +713,12 @@ def main(dataname):
 
     print('train number is {}\ntest number is {}\n val number is {}\n'.format(len(X_train), len(X_test), len(X_val)))
 
-    dataall1 = get_strclncdata(lncstrc, dataset)
-    dataall2 = get_strclncdata(lncstrc4, dataset)
-    dataall3 = get_strclncdata(lncstrc5, dataset)
-    dataall4 = get_strcprodata(prostrc10, dataset)
-    dataall5 = get_strcprodata(prostrc, dataset)
-    dataall6 = get_strcprodata(prostrc9, dataset)
+    dataall1 = get_strclncdata(lncstrc1, dataset)
+    dataall2 = get_strclncdata(lncstrc2, dataset)
+    dataall3 = get_strclncdata(lncstrc3, dataset)
+    dataall4 = get_strcprodata(prostrc3, dataset)
+    dataall5 = get_strcprodata(prostrc1, dataset)
+    dataall6 = get_strcprodata(prostrc2, dataset)
 
     datalncall = [dataall1[i[0]] + dataall2[i[0]] + dataall3[i[0]] for i in dataset]
     datalncall = preprocess_data(datalncall)
