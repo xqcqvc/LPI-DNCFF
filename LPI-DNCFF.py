@@ -23,7 +23,7 @@ from keras.layers import Dot, Activation
 from sklearn.decomposition import PCA
 from sklearn.manifold import TSNE
 
-# 对数据进行标准化或归一化
+
 def preprocess_data(X, scaler=None, stand=True):
     if not scaler:
         if stand:
@@ -35,7 +35,7 @@ def preprocess_data(X, scaler=None, stand=True):
     return X
 
 
-# 评价指标
+
 def calculate_performance(pred_res, pred_label, test_label):
     tn, fp, fn, tp = metrics.confusion_matrix(test_label, pred_label).ravel()
     auc = metrics.roc_auc_score(y_score=pred_res, y_true=test_label)
@@ -59,12 +59,12 @@ def calculate_performance(pred_res, pred_label, test_label):
     print('ap', ap)
     return acc, auc, mcc, f1_score, sensitive, specificity, ppv, ap
 
-# 标签处理
+
 def transfer_label_from_prob(proba):
     label = [1 if val >= 0.5 else 0 for val in proba]
     return label
 
-# 对标签数据进行预处理
+
 def preprocess_labels(labels, encoder=None, categorical=True):
     if not encoder:
         encoder = LabelEncoder()
@@ -423,7 +423,7 @@ def LPIDNCFF(lnc_window_size, pro_window_size, lnc_glowindow, pro_glowindow,
     kernel_size3 = (4, 40)
     kernel_size4 = (5, 40)
     dense3 = 64
-
+    #SS
     inx5 = Input(shape=(117,))
     inx6 = Input(shape=(2764,))
 
@@ -452,7 +452,7 @@ def LPIDNCFF(lnc_window_size, pro_window_size, lnc_glowindow, pro_glowindow,
     x2 = Activation('relu')(x2)
     x2 = GlobalMaxPooling2D(data_format='channels_first')(x2)
     x2 = Dropout(0.2)(x2)
-    #xlocal = Concatenate(axis=1)([x1, x2])
+    # Concatenate
     xlocal = Concatenate()([x1, x2])
     xlocal = Dense(dense1)(xlocal)
 
@@ -566,12 +566,13 @@ def LPIDNCFF(lnc_window_size, pro_window_size, lnc_glowindow, pro_glowindow,
     feature_extractor = Model(inputs=model.input, outputs=flattened_output)
     train_features = feature_extractor.predict(
         [train_lnc_data, train_pro_data, train_glolnc_data, train_glopro_data, train_strc1_data, train_strc2_data], verbose=1)
-    test_features = feature_extractor.predict(
-        [test_lnc_data, test_pro_data, test_glolnc_data, test_glopro_data, test_strc1_data, test_strc2_data], verbose=1)
+    #test_features = feature_extractor.predict(
+        #[test_lnc_data, test_pro_data, test_glolnc_data, test_glopro_data, test_strc1_data, test_strc2_data], verbose=1)
 
     # PCA和t-SNE可视化
-    tsne = TSNE(n_components=2, random_state=42)
-    #pca = PCA(n_components=2)
+    pca = PCA(n_components=2)
+    #tsne = TSNE(n_components=2, random_state=42)
+
     train_features_2d = pca.fit_transform(train_features)
     #train_features_2d = tsne.fit_transform(train_features)
     
